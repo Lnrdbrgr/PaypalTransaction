@@ -111,7 +111,7 @@ get_transactions <- function(access_token,
     rawToChar %>% rjson::fromJSON()
 
   # print warning if more than one page needed
-  if (transaction_list$total_pages > 1){
+  if (!is.null(transaction_list$total_pages) && (transaction_list$total_pages > 1)){
     print(paste0("Page ", page, " of ", transaction_list$total_pages))
   }
 
