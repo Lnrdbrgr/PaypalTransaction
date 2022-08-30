@@ -19,6 +19,7 @@
 #' @import curl
 #' @import rjson
 #' @import httr
+#' @import lubridate
 #'
 #' @examples
 request_access_token <- function(user_pwd,
@@ -39,8 +40,9 @@ request_access_token <- function(user_pwd,
     rawToChar %>% rjson::fromJSON()
 
   # ToDo
+  access_token$expires_on <- Sys.time() + lubridate::seconds(access_token$expires_in)
   if (print_expiry_time){
-    print("functionality not activated yet")
+    print(paste0("Token expires on:  ", access_token$expires_on))
   }
 
   # return token
