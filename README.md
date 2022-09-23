@@ -6,7 +6,13 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of paypaltransaction is to …
+The goal of paypaltransaction is to retrieve one’s personal paypal
+transactions over a specified horizon.
+
+Lots of credit needs to go stackoverflow user *eartoolbox* and her/his
+code in [this
+thread](https://stackoverflow.com/questions/64534998/paypal-sandbox-to-live-transaction-search-api-not-working)
+which helped me a great deal in understanding how to access the API.
 
 ## Installation
 
@@ -19,30 +25,27 @@ devtools::install_github("Lnrdbrgr/paypaltransaction")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Below, the basic workflow is outlined. The `user_pwd` in the function
+`request_access_token` is build using the ‘ID:Secret’ from one’s
+personal paypal API account (`user_pwd <- paste0(ID, ":", secret)`). The
+transactions can only be accessed in a 30-days time window.
 
 ``` r
 library(paypaltransaction)
-#> Lade nötiges Paket: dplyr
-#> 
-#> Attache Paket: 'dplyr'
-#> Die folgenden Objekte sind maskiert von 'package:stats':
-#> 
-#>     filter, lag
-#> Die folgenden Objekte sind maskiert von 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
-#> Lade nötiges Paket: magrittr
-#> Lade nötiges Paket: curl
-#> Using libcurl 7.64.1 with Schannel
-#> Lade nötiges Paket: rjson
-#> Lade nötiges Paket: httr
-#> 
-#> Attache Paket: 'httr'
-#> Das folgende Objekt ist maskiert 'package:curl':
-#> 
-#>     handle_reset
-#> Warning: vorhergehender Import 'curl::handle_reset' durch 'httr::handle_reset'
-#> während des Ladens von 'paypaltransaction' ersetzt
-## basic example code
+
+# request the access token
+token <- request_access_token(user_pwd = user_pwd, return_token_only = TRUE)
+
+# get transactions
+transaction_list <- get_transactions(access_token = acc_token,
+                                     start_date = "2022-08-01",
+                                     end_date = "2022-08-30")
+                                     
+# convert to dataframe
+transaction_df <- transaction_list_to_df(transaction_list)
 ```
+
+Since the transactions come in a somewhat messy list format, I added a
+function which converts the list to a dataframe. The resulting
+`transaction_df` as shown in the example code above is of schema \[date,
+time, value, currency_code, issuer\].
