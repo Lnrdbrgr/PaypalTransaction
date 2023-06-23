@@ -20,7 +20,7 @@ You can install the development version of paypaltransaction like so:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("Lnrdbrgr/paypaltransaction")
+devtools::install_github("Lnrdbrgr/PaypalTransaction")
 ```
 
 ## Example
